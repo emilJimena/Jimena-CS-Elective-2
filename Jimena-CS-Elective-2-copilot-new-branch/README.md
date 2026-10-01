@@ -1,26 +1,24 @@
-# flutter_application_1
+# Pokédex
 
-## Pokédex
-
-A small Flutter app that fetches the first 30 Pokémon from the PokéAPI and shows
-their ID, name, and official artwork in a responsive, scrollable grid.
+A Flutter app that fetches the first 30 Pokémon from PokéAPI. Tap any grid card
+to open a trading-card-inspired page with its description, type, abilities,
+measurements, and base stats.
 
 ## Run
 
 Run `flutter pub get`, then `flutter run`.
 
-## How it is organized
+## Folder structure
 
-- `lib/models/pokemon.dart` defines one Pokémon and its artwork URL.
-- `lib/services/pokemon_service.dart` makes the API request and converts JSON.
-- `lib/pages/pokedex_page.dart` loads the list and handles loading, error, and
-	empty states.
-- `lib/widgets/pokemon_grid.dart` displays the responsive grid and cards.
-- `lib/main.dart` starts the app.
+- `lib/models/` — Pokémon list and detail data models.
+- `lib/services/` — PokéAPI requests and JSON parsing.
+- `lib/pages/` — Pokédex list and Pokémon detail screens.
+- `lib/widgets/` — responsive grid and Pokémon cards.
+- `lib/theme/` — shared app styling.
+- `lib/main.dart` — app entry point.
 
-The list uses a `Future` because it is one request that returns one finite
-result. A `Stream` would be more suitable for data that keeps arriving or
-updating over time, which this Pokédex does not need.
+Each API request uses a `Future` because it returns one finite result. A
+`Stream` would be better for continuous updates or data arriving over time.
 
 ## Getting Started
 
