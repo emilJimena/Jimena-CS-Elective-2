@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../models/pokemon.dart';
-import '../models/pokemon_details.dart';
 import '../services/pokemon_service.dart';
-import 'pokemon_detail_page.dart';
 import '../widgets/pokemon_grid.dart';
 
 class PokedexPage extends StatefulWidget {
   const PokedexPage({
     super.key,
     this.loadPokemon = PokemonService.fetchFirstThirty,
-    this.loadPokemonDetails = PokemonService.fetchDetails,
   });
 
   final Future<List<Pokemon>> Function() loadPokemon;
-  final Future<PokemonDetails> Function(int id) loadPokemonDetails;
 
   @override
   State<PokedexPage> createState() => _PokedexPageState();
@@ -99,19 +95,7 @@ class _PokedexPageState extends State<PokedexPage> {
                   );
                 }
 
-                return PokemonGrid(
-                  pokemon: pokemon,
-                  onPokemonTap: (selectedPokemon) {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (context) => PokemonDetailPage(
-                          pokemon: selectedPokemon,
-                          loadDetails: widget.loadPokemonDetails,
-                        ),
-                      ),
-                    );
-                  },
-                );
+                return PokemonGrid(pokemon: pokemon);
               },
             ),
           ),

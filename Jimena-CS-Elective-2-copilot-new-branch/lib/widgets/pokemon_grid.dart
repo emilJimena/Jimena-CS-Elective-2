@@ -3,14 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/pokemon.dart';
 
 class PokemonGrid extends StatelessWidget {
-  const PokemonGrid({
-    super.key,
-    required this.pokemon,
-    required this.onPokemonTap,
-  });
+  const PokemonGrid({super.key, required this.pokemon});
 
   final List<Pokemon> pokemon;
-  final ValueChanged<Pokemon> onPokemonTap;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
@@ -31,76 +26,64 @@ class PokemonGrid extends StatelessWidget {
           mainAxisSpacing: 12,
           childAspectRatio: 0.78,
         ),
-        itemBuilder: (context, index) => PokemonCard(
-          pokemon: pokemon[index],
-          onTap: () => onPokemonTap(pokemon[index]),
-        ),
+        itemBuilder: (context, index) => PokemonCard(pokemon: pokemon[index]),
       );
     },
   );
 }
 
 class PokemonCard extends StatelessWidget {
-  const PokemonCard({super.key, required this.pokemon, required this.onTap});
+  const PokemonCard({super.key, required this.pokemon});
 
   final Pokemon pokemon;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) => Card(
     clipBehavior: Clip.antiAlias,
-    child: InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Text(
-                '#${pokemon.id.toString().padLeft(3, '0')}',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
+    child: Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Align(
+            alignment: Alignment.topRight,
+            child: Text(
+              '#${pokemon.id.toString().padLeft(3, '0')}',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Image.network(
+                pokemon.imageUrl,
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, progress) => progress == null
+                    ? child
+                    : const Center(child: CircularProgressIndicator.adaptive()),
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.catching_pokemon,
+                  size: 56,
+                  color: Theme.of(context).colorScheme.outline,
                 ),
               ),
             ),
-            Expanded(
-              child: Center(
-                child: Image.network(
-                  pokemon.imageUrl,
-                  fit: BoxFit.contain,
-                  loadingBuilder: (context, child, progress) => progress == null
-                      ? child
-                      : const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        ),
-                  errorBuilder: (context, error, stackTrace) => Icon(
-                    Icons.catching_pokemon,
-                    size: 56,
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
-                ),
-              ),
+          ),
+          const SizedBox(height: 6),
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
             ),
-            const SizedBox(height: 6),
-            SizedBox(
-              width: double.infinity,
-              child: Text(
-                pokemon.name[0].toUpperCase() + pokemon.name.substring(1),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 15,
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     ),
   );
