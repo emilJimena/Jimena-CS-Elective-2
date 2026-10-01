@@ -10,10 +10,10 @@ class PokedexApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'Pokédex',
-    debugShowCheckedModeBanner: false,
-    theme: AppTheme.light,
-    darkTheme: AppTheme.dark,
-    home: const PokedexPage(),
-  );
+        title: 'Pokédex',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        home: const PokedexPage(),
+      );
 }
