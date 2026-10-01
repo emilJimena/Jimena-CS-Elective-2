@@ -1,32 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'pages/dashboard_page.dart';
+import 'pages/pokedex_page.dart';
 import 'theme/app_theme.dart';
 
-// Starts the Flutter application.
-void main() => runApp(const MerchantDashboardApp());
+void main() => runApp(const PokedexApp());
 
-// Stateful because the light/dark theme can change while the app is running.
-class MerchantDashboardApp extends StatefulWidget {
-  const MerchantDashboardApp({super.key});
-
-  @override
-  State<MerchantDashboardApp> createState() => _MerchantDashboardAppState();
-}
-
-class _MerchantDashboardAppState extends State<MerchantDashboardApp> {
-  bool darkMode = false;
+class PokedexApp extends StatelessWidget {
+  const PokedexApp({super.key});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Merchant dashboard',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        // MaterialApp applies the selected theme to every screen and widget.
-        themeMode: darkMode ? ThemeMode.dark : ThemeMode.light,
-        home: DashboardPage(
-          onThemeToggle: () => setState(() => darkMode = !darkMode),
-        ),
-      );
+    title: 'Pokédex',
+    debugShowCheckedModeBanner: false,
+    theme: AppTheme.light,
+    darkTheme: AppTheme.dark,
+    home: const PokedexPage(),
+  );
 }

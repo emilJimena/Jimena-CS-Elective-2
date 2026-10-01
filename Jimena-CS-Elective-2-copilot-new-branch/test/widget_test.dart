@@ -1,29 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lib/main.dart';
+import 'package:flutter_application_1/models/pokemon.dart';
+import 'package:flutter_application_1/pages/pokedex_page.dart';
 
 void main() {
-  testWidgets('renders the Shopify-style discovery dashboard', (tester) async {
-    tester.binding.window.physicalSizeTestValue = const Size(1280, 720);
-    tester.binding.window.devicePixelRatioTestValue = 1.0;
-    addTearDown(tester.binding.window.clearPhysicalSizeTestValue);
-    addTearDown(tester.binding.window.clearDevicePixelRatioTestValue);
+  testWidgets('renders a Pokédex grid without a details screen', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 720);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.pumpWidget(const MerchantDashboardApp());
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PokedexPage(
+          loadPokemon: () async => const [
+            Pokemon(id: 1, name: 'bulbasaur'),
+            Pokemon(id: 2, name: 'ivysaur'),
+          ],
+        ),
+      ),
+    );
     await tester.pump();
 
-    expect(find.text('shopify'), findsOneWidget);
-    expect(find.text('Discover new products to sell'), findsOneWidget);
-    expect(find.text('Instant import'), findsOneWidget);
-    expect(find.text('Recommended suppliers'), findsOneWidget);
-    expect(find.text('Trendsi'), findsAtLeastNWidgets(2));
-    expect(find.text('Universal Standard'), findsAtLeastNWidgets(2));
-
-    await tester.tap(find.text('Products'));
-    await tester.pump();
-    expect(find.text('Products'), findsAtLeastNWidgets(2));
-    expect(find.text('Add'), findsNothing);
+    expect(find.text('Pokédex'), findsOneWidget);
+    expect(find.text('Bulbasaur'), findsOneWidget);
+    expect(find.text('Ivysaur'), findsOneWidget);
+    expect(find.text('#001'), findsOneWidget);
+    expect(find.text('Product details'), findsNothing);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('shows an empty state when the API returns no Pokémon', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PokedexPage(loadPokemon: () async => const <Pokemon>[]),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('No Pokémon found'), findsOneWidget);
+  });
+
+  testWidgets('shows an error message and retry action on failure', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: PokedexPage(loadPokemon: () async => throw Exception('offline')),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Could not load Pokémon'), findsOneWidget);
+    expect(find.text('Try again'), findsOneWidget);
   });
 }

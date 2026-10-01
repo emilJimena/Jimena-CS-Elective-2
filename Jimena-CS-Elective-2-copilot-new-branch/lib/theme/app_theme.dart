@@ -8,18 +8,20 @@ class AppTheme {
   static ThemeData _build(Brightness brightness) {
     final isDark = brightness == Brightness.dark;
     final scheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF4F46C8),
+      seedColor: const Color(0xFFDC3545),
       brightness: brightness,
     );
 
     return ThemeData(
       colorScheme: scheme,
       brightness: brightness,
-      scaffoldBackgroundColor:
-          isDark ? const Color(0xFF1D1F23) : const Color(0xFFF3F4F6),
+      scaffoldBackgroundColor: isDark
+          ? const Color(0xFF1D1F23)
+          : const Color(0xFFF3F4F6),
       appBarTheme: AppBarTheme(
-        backgroundColor:
-            isDark ? const Color(0xFF161719) : const Color(0xFF202123),
+        backgroundColor: isDark
+            ? const Color(0xFF161719)
+            : const Color(0xFF202123),
         foregroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 42,

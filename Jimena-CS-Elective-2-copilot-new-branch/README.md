@@ -1,6 +1,26 @@
 # flutter_application_1
 
-A new Flutter project.
+## Pokédex
+
+A small Flutter app that fetches the first 30 Pokémon from the PokéAPI and shows
+their ID, name, and official artwork in a responsive, scrollable grid.
+
+## Run
+
+Run `flutter pub get`, then `flutter run`.
+
+## How it is organized
+
+- `lib/models/pokemon.dart` defines one Pokémon and its artwork URL.
+- `lib/services/pokemon_service.dart` makes the API request and converts JSON.
+- `lib/pages/pokedex_page.dart` loads the list and handles loading, error, and
+	empty states.
+- `lib/widgets/pokemon_grid.dart` displays the responsive grid and cards.
+- `lib/main.dart` starts the app.
+
+The list uses a `Future` because it is one request that returns one finite
+result. A `Stream` would be more suitable for data that keeps arriving or
+updating over time, which this Pokédex does not need.
 
 ## Getting Started
 
