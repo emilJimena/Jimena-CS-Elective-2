@@ -21,6 +21,11 @@ class _PokedexPageState extends State<PokedexPage> {
     });
   }
 
+  Future<void> _refreshPokemon() async {
+    final provider = context.read<PokemonProvider>();
+    await provider.fetchPokemon();
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<PokemonProvider>();
@@ -40,7 +45,7 @@ class _PokedexPageState extends State<PokedexPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: provider.refresh,
+            onPressed: _refreshPokemon,
             icon: const Icon(Icons.refresh),
             tooltip: 'Refresh Pokémon',
           ),
@@ -77,7 +82,7 @@ class _PokedexPageState extends State<PokedexPage> {
                           title: 'Could not load Pokémon',
                           message: 'Check your internet connection and try again.',
                           actionLabel: 'Try again',
-                          onAction: provider.refresh,
+                          onAction: _refreshPokemon,
                         )
                       : provider.pokemon.isEmpty
                           ? const _MessageState(
