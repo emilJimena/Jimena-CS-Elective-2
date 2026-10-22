@@ -26,16 +26,29 @@ class PokemonService {
     }
 
     final results = decoded['results'] as List<dynamic>;
-    return results
-        .map((result) {
-          if (result is! Map<String, dynamic>) {
-            throw const FormatException(
-              'PokéAPI returned invalid Pokémon data.',
-            );
-          }
-          return Pokemon.fromJson(result);
-        })
-        .toList(growable: false);
+    final details = await Future.wait(
+      results.map((result) async {
+        if (result is! Map<String, dynamic> || result['url'] is! String) {
+          throw const FormatException('PokéAPI returned invalid Pokémon data.');
+        }
+
+        final detailResponse = await http
+            .get(Uri.parse(result['url'] as String))
+            .timeout(const Duration(seconds: 15));
+        if (detailResponse.statusCode != 200) {
+          throw PokemonApiException(
+            'PokéAPI returned status code ${detailResponse.statusCode}.',
+          );
+        }
+
+        final detail = jsonDecode(detailResponse.body);
+        if (detail is! Map<String, dynamic>) {
+          throw const FormatException('PokéAPI returned invalid Pokémon data.');
+        }
+        return Pokemon.fromJson(detail);
+      }),
+    );
+    return details;
   }
 }
 

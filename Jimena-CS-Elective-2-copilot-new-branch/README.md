@@ -2,8 +2,10 @@
 
 ## Pokédex
 
-A small Flutter app that fetches the first 30 Pokémon from the PokéAPI and shows
-their ID, name, and official artwork in a responsive, scrollable grid.
+A Flutter app that fetches the first 30 Pokémon from the PokéAPI and shows their
+ID, original name, official artwork, and actual types in a responsive grid.
+Use Riverpod to refresh the list, filter by type, assign nicknames, and manage
+favorites.
 
 ## Run
 
@@ -13,14 +15,21 @@ Run `flutter pub get`, then `flutter run`.
 
 - `lib/models/pokemon.dart` defines one Pokémon and its artwork URL.
 - `lib/services/pokemon_service.dart` makes the API request and converts JSON.
-- `lib/pages/pokedex_page.dart` loads the list and handles loading, error, and
-	empty states.
-- `lib/widgets/pokemon_grid.dart` displays the responsive grid and cards.
-- `lib/main.dart` starts the app.
+- `lib/providers/pokemon_provider.dart` manages async list fetching and all
+	Pokédex interaction state with Riverpod.
+- `lib/pages/pokedex_page.dart` handles loading/error/empty states, refresh,
+	type filtering, and the expandable favorites panel.
+- `lib/pages/pokemon_detail_page.dart` displays Pokémon details and nickname and
+	favorite controls.
+- `lib/widgets/pokemon_grid.dart` displays responsive cards and favorite hearts.
+- `lib/widgets/nickname_editor_dialog.dart` edits or removes custom nicknames.
+- `lib/widgets/favorites_panel.dart` shows the expandable, live favorites list.
+- `lib/main.dart` starts the app inside a Riverpod `ProviderScope`.
 
-The list uses a `Future` because it is one request that returns one finite
-result. A `Stream` would be more suitable for data that keeps arriving or
-updating over time, which this Pokédex does not need.
+The app uses a Riverpod `AsyncNotifier` for asynchronous Pokémon loading and a
+Riverpod `Notifier` for nicknames, favorites, the selected Pokémon, and the type
+filter. The service fetches each Pokémon's detail record to get its actual type
+data for filtering.
 
 ## Getting Started
 
