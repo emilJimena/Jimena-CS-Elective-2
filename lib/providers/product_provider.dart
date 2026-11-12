@@ -1,0 +1,53 @@
+import 'package:cs_elective_2/providers/product_filter_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/product.dart';
+import '../services/product_service.dart';
+import 'supabase_provider.dart';
+
+final productServiceProvider = Provider<ProductService>((ref) {
+  return ProductService(ref.watch(supabaseProvider));
+});
+
+final productProvider = AsyncNotifierProvider<ProductNotifier, List<Product>>(
+  ProductNotifier.new,
+);
+
+class ProductNotifier extends AsyncNotifier<List<Product>> {
+  @override
+  Future<List<Product>> build() {
+    final filter = ref.watch(productFilterProvider);
+    return _fetch();
+  }
+
+  Future<List<Product>> _fetch() {
+    final filter = ref.read(productFilterProvider);
+    return ref.read(productServiceProvider).fetchProducts(
+      search: filter.search,
+      categoryId: filter.categoryId,
+      minPrice: filter.minPrice,
+      maxPrice: filter.maxPrice,
+      limit: filter.pageSize,
+      offset: filter.offset,
+    );
+  }
+
+  Future<void> addProduct(Product product) async {
+    await ref.read(productServiceProvider).addProduct(product);
+    state = AsyncValue.data(await _fetch());
+  }
+
+  // Delete a product and update the state to remove it from the list
+  Future<void> deleteProduct(int id) async {
+    await ref.read(productServiceProvider).deleteProduct(id);
+    final currentProducts = state.value ?? [];
+    state = AsyncData(currentProducts.where((p) => p.id != id).toList());
+  }
+
+  Future<void> updateProduct(Product product) async {
+    await ref.read(productServiceProvider).updateProduct(product);
+    final currentProducts = state.value ?? [];
+    state = AsyncData(
+      currentProducts.map((p) => p.id == product.id ? product : p).toList(),
+    );
+  }
+}
