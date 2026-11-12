@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthService {
@@ -12,6 +13,16 @@ class AuthService {
     return await _client.auth.signInWithPassword(
       password: password,
       email: email,
+    );
+  }
+
+  // sign in with Google OAuth
+  Future<bool> signInWithGoogle() async {
+    final redirectTo = kIsWeb ? null : 'io.supabase.cs-elective-2://login-callback/';
+
+    return await _client.auth.signInWithOAuth(
+      OAuthProvider.google,
+      redirectTo: redirectTo,
     );
   }
 

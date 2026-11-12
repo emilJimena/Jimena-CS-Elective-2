@@ -80,13 +80,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     : const Text('Sign in'),
               ),
             ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: isLoading ? null : () => controller.signInWithGoogle(),
+                icon: const Icon(Icons.g_mobiledata_rounded),
+                label: const Text('Continue with Google'),
+              ),
+            ),
             TextButton(
-              // onPressed: isLoading
-              //     ? null
-              //     : () => controller.signUp(
-              //         _emailController.text,
-              //         _passwordController.text,
-              //       ),
               onPressed: () {
                 Navigator.push(
                   context,

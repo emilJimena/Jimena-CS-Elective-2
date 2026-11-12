@@ -35,6 +35,11 @@ class AuthController extends AsyncNotifier<void> {
     );
   }
 
+  Future<void> signInWithGoogle() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() => _service.signInWithGoogle());
+  }
+
   Future<void> signUp(
     String email,
     String password,
